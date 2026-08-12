@@ -1,4 +1,5 @@
 // For using the Servies of Appwrite we created and separate folder so we don't face the problem of vendor lock-in  . This file has Authentication services
+// The {AuthService , this.account.create , Client , account , ID } are not the part of the react itself they belongs to the documentation of " AppWrite " - open source backend-as-a-Service app . [So , don't confuse with them ]
 
 import config from "../Config/Config";
 
@@ -20,11 +21,11 @@ export class AuthService {
     async createAccount({email , password , name }){      // Here , we destructred the items that are passed us in the object ( that are - name , email , password )
       
         try {
-            await this.account.create
+          const userAccount =  await this.account.create
             (ID.unique() , email , password , name ) ;
             if (userAccount) {
                 // call another method - jis vich je successfully login ho gya teh usnu logIn krva dena application vich sidha ..
-
+                 return this.login({email,password}) ;  // Calling the login method to log in the user after creating the account
                 }
             else { return userAccount }    
         } 
@@ -33,6 +34,28 @@ export class AuthService {
            throw error ;
 
         }
+    }
+
+    // Another method 
+    async login({email,password}) {
+        try {
+            return await this.account.createEmailSession
+            (email,password) ;
+        } catch (error) {
+            throw error ;
+        }
+    }
+
+
+    // Another method / functionality from the Appwrite Services 
+    async getCurrentuser () {
+        try {
+           return await this.account.get();
+        } catch (error) {
+            throw error ; 
+        }
+
+        return null ; // account miliya hi nhi 
     }
 } 
 

@@ -1,5 +1,8 @@
 // For using the Servies of Appwrite we created and separate folder so we don't face the problem of vendor lock-in  . This file has Authentication services
 // The {AuthService , this.account.create , Client , account , ID } are not the part of the react itself they belongs to the documentation of " AppWrite " - open source backend-as-a-Service app . [So , don't confuse with them ]
+ 
+ 
+//           INDEPENDENT / REUSABLE CHUNK OF CODE FOR AUTHENTICATION SERVICE [ ihnu hun mein kite bhi use kr skda kite bhi lor peve appwrite di authentication code di lor bs copy-paste karna  ]
 
 import config from "../Config/Config";
 
@@ -57,6 +60,17 @@ export class AuthService {
 
         return null ; // account miliya hi nhi 
     }
-} 
+
+    // Logout method for logging out the account
+     async logout () {
+        try {
+           await this.accountdeleteSessions();       // jihne bhi saare bhi sesssions chal rehe hone kisi bhi browser pr oh delete ho jane 
+        } catch (error) {
+            console.log('Appwrite serive :: logout :: error' , error );
+        }
+     } 
+  } 
 
 const authService = new AuthService();   // Directly exporting the object rather than class as now we can directly access the properties of this object by '.'   
+
+export default authService

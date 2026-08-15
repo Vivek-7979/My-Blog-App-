@@ -2,11 +2,12 @@
 //  THIS FILE IS SPECIFICALLY USED FOR -> STATE MANAGEMENT ( by the RTK{Redux Toolkit }) 
 
 import { configureStore } from "@reduxjs/toolkit";
+import authReducer from "./AuthSlice";
 
 const store = configureStore({
 
     reducer : {
-
+        auth: authReducer
     }
 });
 

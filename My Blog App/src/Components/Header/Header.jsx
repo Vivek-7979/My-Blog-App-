@@ -13,7 +13,7 @@ const navigate = useNavigate()  // For naviagte the routing
 
 
 // here , In production grade application we dont use the buttons but we use the array inside it we have many objects that navigates to some path . Because , it's easier and efficient 
-const navitems = [
+const navItems = [
 
   // Here URl is nothing but the variable name for the path where it go . We can also write is as " Slug " . Both are CORRECT 
   { name : 'Home' , URL : '/' , active : true } ,                   { name : 'Login' , URL : '/login' , active : !authStatus , } ,
@@ -36,7 +36,24 @@ const navitems = [
 
   </div> 
 
+{/* here , we have the ul list and to get all the items we will loop on the navItems array  */}
+<ul className='flex ml-auto'>
+  
+{navItems.map((item) => 
+item.active ? (
+<li key={item.name}>                             {/* Key is the unique id we have to give it will using the manp function on the array  */}
+{                                                 /*  This navigate is got from the useNavigate of the react-router-dom */ }
+  <button onClick={ () => navigate(item.URL)}    
+    className='inline-block px-6 py-2 duration-200 hover:bg-blue-100 rounded-full'>
+       {item.name}        {/* The name that will display in the li */}
+       </button>
+</li>
+) : null 
+)}
 
+{ authStatus && ( <li> <LogoutBtn/> </li> )} {/* This is the js or simply react injected inside the plain html in which this code says that . If the person is authenticated or simple if the person is loggedIn only then show him the logout Button in the navbar otherwise no need to show that logout button { simpley fir oh show krke krna bhi kya ga }  */}
+
+</ul>
 
   </nav>
 

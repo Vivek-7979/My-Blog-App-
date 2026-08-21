@@ -14,7 +14,7 @@ function Login() {
     // Using all the js logic 
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const [ register , handleSubmit ] = useform() // Don't worry about this as this is the react-hook-form library's own syntax 
+    const { register , handleSubmit } = useform() // Don't worry about this as this is the react-hook-form library's own syntax 
     const [error , setError ] = useState('')
 
 
@@ -67,13 +67,28 @@ function Login() {
             <div className='space-y-5'>
 
         {/* This is out Input component that we have made in the separate file  */}      
+        {/* This is the complez form  version of the email entering as this is the advanced feature which is done using react-hook-library and regrex  */}
         <Input
         label ='Email: '
         placeholder ='Enter your email'
+        type='email'
+
+        {...register('email' , {
+            required: true,
+            validate : { matchPattern:(value) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value) || 'Email address must be valid ' , }   // Here ; register is the syntax of the react-hook-form library . And ; we dont have to memorize the regrex pattern we just have to copy paste it from the google { like in this we have the regrex for the email required / valid format of the email }
+        })}
         
         />
 
+        <Input
+        label='Password: '
+        type='password'
+        placeholder='Enter Your Password'
 
+        {...register('password' , { required:true })} // Here the JS is written inside the {} . Then , we have spreaded the register and inside it we have given a key . Key like - password , email etc  and then we can also give the . 
+        />
+
+        <Button type='submit' className='w-full' > Sign In </Button>
             </div>
             
             </form>        

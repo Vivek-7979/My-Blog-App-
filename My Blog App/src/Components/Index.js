@@ -12,6 +12,8 @@ import Select from "./Select";
 import RTE from "./RTE";
 import SignUp from "./SignUp";
 import Login from "./Login";
+import PostForm from "./post-form/PostForm";
+
 
 
 export { 
@@ -26,5 +28,6 @@ export {
     Select,
     RTE,
     SignUp,
-    Login
+    Login,
+    PostForm
 }

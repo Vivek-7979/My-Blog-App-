@@ -10,6 +10,8 @@ import Button from './Button'
 import PostCard from "./PostCard";
 import Select from "./Select";
 import RTE from "./RTE";
+import SignUp from "./SignUp";
+import Login from "./Login";
 
 
 export { 
@@ -22,5 +24,7 @@ export {
     Button,
     PostCard,
     Select,
-    RTE
+    RTE,
+    SignUp,
+    Login
 }

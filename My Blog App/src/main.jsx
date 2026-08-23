@@ -5,9 +5,14 @@ import './index.css'
 import App from './App.jsx'
 import store from './Store/Store.js'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { AuthLayout , Login, SignUp } from './Components/Index.js'
-import EditPost from './pages/EditPost.jsx'
+import { AuthLayout , Login } from './Components/Index.js'
 
+import EditPost from './pages/EditPost.jsx'
+import SignUp from './pages/SignUp.jsx'
+import AddPost from './pages/AddPost.jsx'
+import AllPosts from './pages/AllPosts.jsx'
+import Post from './pages/Post.jsx'
+import Home from './pages/Home.jsx'
 
 // Hun ithe perform honi saari routing 
 // Routing apa perfrom karvani hun authlayout vich wrap krvake because authlayout neh dasna sanu ki person/user authenticated hai ya nhi 

@@ -24,9 +24,12 @@ export class AuthService {
     async createAccount({email , password , name }){      // Here , we destructred the items that are passed us in the object ( that are - name , email , password )
       
         try {
-          const userAccount =  await this.account.create(
-            ID.unique() , email , password , name 
-          );
+                    const userAccount = await this.account.create({
+                        userId: ID.unique(),
+                        email,
+                        password,
+                        name,
+                    });
             if (userAccount) {
                 // call another method - jis vich je successfully login ho gya teh usnu logIn krva dena application vich sidha ..
                  return this.login({email,password}) ;  // Calling the login method to log in the user after creating the account
@@ -45,8 +48,7 @@ export class AuthService {
     // Another method 
     async login({email,password}) {
         try {
-            return await this.account.createEmailPasswordSession
-            (email,password) ;
+            return await this.account.createEmailPasswordSession({ email, password });
         } catch (error) {
             throw error ;
         }

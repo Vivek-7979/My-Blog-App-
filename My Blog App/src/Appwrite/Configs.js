@@ -1,30 +1,30 @@
 import config from "../Config/Config";
 
-import { Client, Account, ID , Databases,Storage , Query  } from "appwrite";
+import { Client, ID, Query, Storage, TablesDB } from "appwrite";
 
 export class Service {
 
     client = new Client();
-    databases;
+    tables;
     bucket; 
     
     constructor(){
         this.client
         .setEndpoint(config.appwriteURL)
         .setProject(config.appwriteProjectId);
-        this.databases = new Databases(this.client);
+        this.tables = new TablesDB(this.client);
         this.bucket = new Storage (this.client); }
    
 // Method to create a Blog Post 
 async createPost ({title , slug , content , featuredImage , status , userId }){
 
     try {
-        return await this.databases.createDocument(
-            config.appwriteDatabaseId,
-            config.appwriteCollectionId,
-            slug, 
-            { title , content , featuredImage , status , userId }  // To get the more things these are those 
-        )
+        return await this.tables.createRow({
+            databaseId: config.appwriteDatabaseId,
+            tableId: config.appwriteCollectionId,
+            rowId: slug,
+            data: { title, content, featuredImage, status, userId },
+        });
     } catch (error) {
         console.log('Appwrite service :: createPost :: error' , error )
     }
@@ -36,12 +36,12 @@ async updatePost (slug , {title , content , featuredImage, status , }){
     
     try {
 
-        return await this.databases.updateDocument(
-            config.appwriteDatabaseId,
-            config.appwriteCollectionId,
-            slug, 
-            { title , content , featuredImage , status }  // To get the more things these are those 
-        )
+        return await this.tables.updateRow({
+            databaseId: config.appwriteDatabaseId,
+            tableId: config.appwriteCollectionId,
+            rowId: slug,
+            data: { title, content, featuredImage, status },
+        });
 
     }
        catch (error) {
@@ -57,11 +57,11 @@ async deletePost (slug) {
      
     try {
 
-        return await this.databases.deleteDocument(
-            config.appwriteDatabaseId,
-            config.appwriteCollectionId,
-            slug, 
-            )
+        await this.tables.deleteRow({
+            databaseId: config.appwriteDatabaseId,
+            tableId: config.appwriteCollectionId,
+            rowId: slug,
+        });
         return true    
 
     }
@@ -75,11 +75,11 @@ async deletePost (slug) {
 // Method to get the [ one specific-post ]  . Particular blog post  
 async getPost(slug){
     try {
-        return await this.databases.getDocument(
-            config.appwriteDatabaseId,
-            config.appwriteCollectionId,
-            slug
-        )
+        return await this.tables.getRow({
+            databaseId: config.appwriteDatabaseId,
+            tableId: config.appwriteCollectionId,
+            rowId: slug,
+        });
     } catch (error) {
         console.log(' Appwrite serive :: getPost :: error' , error );
         return false 
@@ -90,11 +90,11 @@ async getPost(slug){
   async getPosts (queries = [ Query.equal('status', 'active' ) ]  ) {  // this queries argument and all thing is the part of the appwrite . And this is written in appwrite's document . So , don't worry about it as it is the part of the appwrite documentation
 
     try {
-        return await this.databases.listDocuments(
-            config.appwriteDatabaseId,
-            config.appwriteCollectionId,
-            queries,    // The query we have written inside the argument of the function . There can be multiple queries 
-        )
+        return await this.tables.listRows({
+            databaseId: config.appwriteDatabaseId,
+            tableId: config.appwriteCollectionId,
+            queries,
+        });
     } catch (error) {
         console.log(' Appwrite serive :: getPosts :: error' , error );
         return false 
@@ -106,11 +106,11 @@ async getPost(slug){
   async uploadFile(file){
 
     try {
-        return await this.bucket.createFile(
-            config.appwriteBucketId,
-            ID.unique(), // this f(x) of the appwrite generates a unique number / if for the uploaded file 
-            file
-        )
+        return await this.bucket.createFile({
+            bucketId: config.appwriteBucketId,
+            fileId: ID.unique(),
+            file,
+        });
         
     } catch (error) {
         console.log('Appwrite service :: uploadFile :: error ' , error );
@@ -123,10 +123,10 @@ async getPost(slug){
 async deleteFile(fileId){
 
     try {
-        await this.bucket.deleteFile(
-            config.appwriteBucketId,
-            fileId
-        ) 
+        await this.bucket.deleteFile({
+            bucketId: config.appwriteBucketId,
+            fileId,
+        });
         return true
 
     } 
@@ -140,10 +140,10 @@ async deleteFile(fileId){
 
 // Method to preview the file . This is the feature given by the appWrite Service whose response is very fast 
 getFilePreview(fileId){
-    return this.bucket.getFilePreview(
-        config.appwriteBucketId,
-        fileId
-    )
+    return this.bucket.getFilePreview({
+        bucketId: config.appwriteBucketId,
+        fileId,
+    });
 }
 
   }

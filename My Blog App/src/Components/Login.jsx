@@ -2,7 +2,7 @@
 
 import React ,{useState} from 'react'
 import { Link , useNavigate } from 'react-router-dom'
-import { Login as authLogin } from '../Store/AuthSlice' // We named login method as authlogin in this file and where we write the authlogin it means login . We can also write the authlogin as the Storelogin
+import { login as authLogin } from '../Store/AuthSlice' // We named login method as authlogin in this file and where we write the authlogin it means login . We can also write the authlogin as the Storelogin
 import { useDispatch } from 'react-redux'
 import { Button , Input , Logo } from './Index'
 import authService from '../Appwrite/Auth_service'
@@ -14,7 +14,7 @@ function Login() {
     // Using all the js logic 
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const { register , handleSubmit } = useform() // Don't worry about this as this is the react-hook-form library's own syntax 
+    const { register , handleSubmit } = useForm() // Don't worry about this as this is the react-hook-form library's own syntax 
     const [error , setError ] = useState('')
 
 

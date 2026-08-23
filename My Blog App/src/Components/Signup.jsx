@@ -1,7 +1,7 @@
 import React  ,{useState} from 'react'
 import authService from '../Appwrite/Auth_service'
 import { Link , useNavigate } from 'react-router-dom'
-import { Login } from '../Store/AuthSlice'
+import { login } from '../Store/AuthSlice'
 import { Button ,Input , Logo} from './Index'
 import { useDispatch } from 'react-redux'
 import { useForm } from 'react-hook-form'
@@ -14,7 +14,7 @@ function Signup() {
 
 const navigate = useNavigate()  //to forcefully navigate after succesfull navigation
 const [error , setError ] = useState('')
-const dispach = useDispatch()
+const dispatch = useDispatch()
 const {register , handleSubmit } = useForm()  // This is from the react-hook-library syntax
 
 

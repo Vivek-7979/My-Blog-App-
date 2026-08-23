@@ -13,7 +13,7 @@ useEffect ( ( ) => {
 
   appwriteService.getPosts().then( (posts) =>{  // apa appwrite service de vicho getposts ala method le rehe tah ki sari di saari pists show krwa sakiye 
 
-    if(posts) { setPosts(posts.documents )}
+    if(posts) { setPosts(posts.rows )}
 
   })
 } , [] )

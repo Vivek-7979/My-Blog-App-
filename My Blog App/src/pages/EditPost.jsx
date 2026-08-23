@@ -30,7 +30,7 @@ useEffect(()=> {
     <div className='py-8'>
 
   <Container>
-      <PostForm post={post}/>
+      <PostForm post={post}/>   {/* JE taah post haigi  hai taah ohnu edit ala page show krdo  */}
   </Container>
 
     </div>

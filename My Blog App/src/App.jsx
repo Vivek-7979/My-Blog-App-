@@ -45,7 +45,7 @@ return (
 
   <Header />
 
-<main> This is changing part the outlet 
+<main> 
   < Outlet />  {/*: header footer taah coanstant hi rehna vich ala change hona oh eh ga   */} 
 </main>
 

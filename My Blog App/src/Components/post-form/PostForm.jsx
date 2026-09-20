@@ -19,10 +19,14 @@ defaultValues: {
 
 
 const navigate = useNavigate()                                  // navigation feature from router
-const userData = useSelector( state => state.user.userData )   // Here by using the 'useSelector' from react-redux library {know for its advanced state management feature } . We accessed the userData from the state in which user is stored 
- 
+const userData = useSelector((state) => state.auth?.userData)    // The application stores the authenticated user under auth.userData.
+
 // method jihde naal post update ya new create honi 
-const submit = async (data) =>{
+const submit = async (data) => {
+  if (!userData?.$id) {
+    navigate('/login', { replace: true });
+    return;
+  }
 
   if (post) {  // je taah post pehla toh hi hai mtlb uploaded post nu update karna 
 

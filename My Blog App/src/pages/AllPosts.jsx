@@ -1,23 +1,44 @@
 import React , {useState , useEffect} from 'react'
+import { useSelector } from 'react-redux'
 import appwriteService from '../Appwrite/Configs'
 import { Container , PostCard } from '../Components/Index'
 
 function AllPosts() {
 
+    const authStatus = useSelector((state) => Boolean(state.auth?.status));
     const [posts , setPosts ] = useState([])
 
     useEffect(() => {
+        let isMounted = true;
 
-    } ,[])
+        if (!authStatus) {
+            setPosts([]);
+            return () => {
+                isMounted = false;
+            };
+        }
 
-    appwriteService.getPosts( [] ).then ((posts) => {
+        const fetchPosts = async () => {
+            try {
+                const postsData = await appwriteService.getPosts([]);
 
-        if (posts) {
-            setPosts(posts.rows)
-        } else { 'post not found'}
-    })
+                if (isMounted && postsData) {
+                    setPosts(postsData.rows || []);
+                }
+            } catch (error) {
+                console.error('AllPosts :: getPosts failed', error);
+                if (isMounted) {
+                    setPosts([]);
+                }
+            }
+        };
 
+        fetchPosts();
 
+        return () => {
+            isMounted = false;
+        };
+    }, [authStatus]);
 
   return (
 

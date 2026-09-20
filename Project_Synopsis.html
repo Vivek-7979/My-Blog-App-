@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project Synopsis</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 18mm 15mm 18mm 15mm;
+    }
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.6;
+      color: #111827;
+      background: white;
+      margin: 0;
+      padding: 0;
+    }
+    .page {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 18px 14px 30px 14px;
+    }
+    h1, h2, h3, h4 {
+      color: #111827;
+      page-break-after: avoid;
+    }
+    h1 {
+      font-size: 26px;
+      margin-top: 16px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+    h2 {
+      font-size: 18px;
+      margin-top: 20px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid #d1d5db;
+      padding-bottom: 4px;
+    }
+    h3 {
+      font-size: 15px;
+      margin-top: 12px;
+      margin-bottom: 6px;
+    }
+    p, li {
+      font-size: 12.5px;
+      margin: 6px 0;
+      text-align: justify;
+    }
+    ul, ol {
+      margin-top: 6px;
+      margin-bottom: 8px;
+      padding-left: 22px;
+    }
+    strong {
+      font-weight: 700;
+    }
+    .small-note {
+      font-size: 11px;
+      color: #374151;
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>Development of a Blog Management Web Application using React and Appwrite</h1>
+
+    <h2>1. Project Title</h2>
+    <p>Development of a Blog Management Web Application using React and Appwrite</p>
+
+    <h2>2. Abstract</h2>
+    <p>The project aims to provide a lightweight blog application that allows authenticated users to create, update, view, and delete blog posts. The system is implemented as a single-page web application using React and is backed by Appwrite, a Backend-as-a-Service platform, for authentication, database management, and file storage. The application includes a public home page, post detail view, login and signup pages, route protection, and author-based post management. A rich text editor is integrated for content creation, while Redux Toolkit is used for maintaining global authentication state. The current implementation demonstrates the practical use of modern frontend concepts, BaaS integration, and content management workflows in a web application environment.</p>
+
+    <h2>3. Introduction</h2>
+    <p>Blogging has become one of the most common digital content-sharing activities in the modern web environment. Traditional blogging systems often require both a frontend interface and a backend service for user authentication, content persistence, media management, and secure access control. In smaller-scale applications, developers often prefer using BaaS platforms to reduce backend complexity while maintaining a structured data model and secure user sessions.</p>
+    <p>The present project addresses this need by developing a blog web application with a React-based frontend and Appwrite as the backend service. The system is designed to support content creation and retrieval in a simple but effective manner, making it suitable as an academic project demonstrating frontend development, state management, routing, media handling, and cloud-based database services. The application also introduces the concept of protected routes, where only authenticated users can access management functions such as creating and editing content.</p>
+
+    <h2>4. Problem Statement</h2>
+    <p>Many small-scale content publishing platforms require manageable user authentication, a suitable content storage model, and a simple publishing interface without the overhead of a custom backend implementation. A manual blog workflow typically involves scattered content storage, inconsistent user management, and difficulty in maintaining access control. The project addresses the need for a simple blog management system that combines frontend usability with backend-managed authentication and storage.</p>
+    <p>The repository implements a blog application that allows users to create blog posts, store them in a cloud database, display them to readers, and restrict content management features to authorized users. However, the current codebase also reveals certain implementation gaps, particularly in the signup workflow, which should be treated as a partial implementation rather than a complete production-ready registration system.</p>
+
+    <h2>5. Objectives</h2>
+    <ul>
+      <li>To design and implement a blog application interface using React.</li>
+      <li>To integrate Appwrite for authentication, database storage, and file management.</li>
+      <li>To implement user login and session state management using Redux Toolkit.</li>
+      <li>To provide protected access to post management routes.</li>
+      <li>To allow authenticated users to create and publish blog posts.</li>
+      <li>To support listing and viewing posts on a public interface.</li>
+      <li>To enable editors to update and delete their own posts.</li>
+      <li>To implement a rich text editing experience for article content.</li>
+      <li>To apply routing and conditional rendering for different user states.</li>
+      <li>To provide a working academic prototype for blog application development using a BaaS model.</li>
+    </ul>
+
+    <h2>6. Scope of the Project</h2>
+    <p>The current project covers:</p>
+    <ul>
+      <li>User login using Appwrite email/password authentication</li>
+      <li>Client-side global authentication state using Redux Toolkit</li>
+      <li>Navigation across login, signup, home, post detail, all posts, and post management pages</li>
+      <li>Post creation form with title, slug, content, status, and featured image support</li>
+      <li>Post listing and detail view</li>
+      <li>Post update and delete actions for the author</li>
+      <li>Image upload and preview using Appwrite Storage</li>
+      <li>Rich text post content editing using TinyMCE</li>
+      <li>Protected access to authenticated routes</li>
+    </ul>
+    <p>The current scope does not include:</p>
+    <ul>
+      <li>A custom backend server</li>
+      <li>Role-based authorization beyond basic user ownership checks</li>
+      <li>Advanced moderation or admin panel</li>
+      <li>Commenting system</li>
+      <li>Search and filtering across large post collections</li>
+      <li>Payment, subscriptions, or e-commerce features</li>
+      <li>Automated testing suite</li>
+      <li>Production deployment setup documentation beyond code-level configuration</li>
+    </ul>
+
+    <h2>7. Existing System</h2>
+    <p>The conventional approach to managing blog content typically involves a combination of a frontend interface and a backend service, often in the form of custom APIs or content management systems. In manual or basic implementations, authors may write content in text files or offline documents and later upload them to websites without structured access control or persistence. This approach is usually difficult to maintain and lacks efficient content management features.</p>
+    <p>In the present project, this conventional approach is replaced by a browser-based blog application that uses Appwrite services for data storage and session handling. The app minimizes backend development overhead while still providing core CRUD operations for content management. The system is therefore positioned as a simplified, modern content management approach rather than a full-scale CMS.</p>
+
+    <h2>8. Proposed System</h2>
+    <p>The proposed system is a single-page blog application built using the React library with Appwrite as the backend service layer. The application provides a clear user journey from login/signup to content creation and viewing. The user interface is organized around pages such as Home, Login, Signup, All Posts, Add Post, Edit Post, and individual Post details.</p>
+    <p>The key improvement over a manual workflow is the automation of authentication, storage, and file upload operations using Appwrite. A user can log in, create a post with rich content, upload an image, and save the post in the Appwrite database. Once stored, the content can be listed publicly or displayed in detail. Author-based access control is enforced in the frontend by checking whether the current signed-in user matches the post author. This ensures that only the author can edit or delete their post.</p>
+
+    <h2>9. Feasibility Study</h2>
+    <h3>9.1 Technical Feasibility</h3>
+    <p>The project is technically feasible because it uses well-established frontend technologies and a cloud-based backend service. React provides component-based UI development, Vite supports fast local builds, Redux Toolkit manages global session state, and Appwrite provides ready-made authentication and database services. The project is feasible within a B.Tech academic timeframe because it uses a BaaS model instead of building a full custom backend.</p>
+    <h3>9.2 Economic Feasibility</h3>
+    <p>The application is economically feasible because it uses open-source technologies and a backend service model instead of building a separate backend infrastructure. The project does not require dedicated server provisioning for the basic functionality demonstrated. The major cost is associated with developer time and configuration of the Appwrite project.</p>
+    <h3>9.3 Operational Feasibility</h3>
+    <p>The system is operationally feasible for a small or medium-sized blog use case. It supports the essential workflow of login, posting, listing, and management. The project is suitable for academic demonstration and can be extended in future versions with advanced role management, comments, SEO features, and improved admin workflows.</p>
+
+    <h2>10. Functional Requirements</h2>
+    <ul>
+      <li>User authentication through Appwrite email/password session</li>
+      <li>User login and logout</li>
+      <li>Global session state tracking</li>
+      <li>Route protection for authenticated pages</li>
+      <li>Blog post creation with title, content, slug, status, and image</li>
+      <li>Blog post retrieval for home and detail pages</li>
+      <li>Blog post update by the author</li>
+      <li>Blog post deletion by the author</li>
+      <li>List of posts in a responsive card layout</li>
+      <li>Rich text content editing using TinyMCE</li>
+      <li>Feature image upload and preview</li>
+      <li>Display of public post content to users</li>
+    </ul>
+
+    <h2>11. Non-Functional Requirements</h2>
+    <ul>
+      <li>Usability: Clear navigation, forms, and content cards</li>
+      <li>Responsiveness: UI layout uses flexible container and width-based styling</li>
+      <li>Maintainability: Modular components and reusable UI elements</li>
+      <li>Reliability: Basic error handling for Appwrite operations and route redirects</li>
+      <li>Security: Client-side authentication state and protected route logic</li>
+      <li>Compatibility: Browser-based web application compatible with standard modern browsers</li>
+      <li>Performance: Lightweight client-side rendering with Vite build</li>
+    </ul>
+
+    <h2>12. Technology Stack</h2>
+    <ul>
+      <li><strong>Frontend:</strong> React</li>
+      <li><strong>Build Tool:</strong> Vite</li>
+      <li><strong>Routing:</strong> React Router</li>
+      <li><strong>State Management:</strong> Redux Toolkit</li>
+      <li><strong>Form Handling:</strong> React Hook Form</li>
+      <li><strong>Rich Text Editor:</strong> TinyMCE</li>
+      <li><strong>Styling:</strong> Tailwind CSS</li>
+      <li><strong>Backend/BaaS:</strong> Appwrite</li>
+      <li><strong>Database/Storage:</strong> Appwrite TablesDB and Storage</li>
+      <li><strong>Authentication:</strong> Appwrite Account API</li>
+      <li><strong>Language:</strong> JavaScript (React JSX)</li>
+      <li><strong>Package Manager:</strong> npm</li>
+    </ul>
+
+    <h2>13. System Architecture</h2>
+    <p>The system follows a client-side architecture with Appwrite as the backend service. The interaction flow is:</p>
+    <p>User → React Frontend → Redux State Management → Appwrite Authentication/Database/Storage → Response → UI Update</p>
+    <p>The architecture is a single-page application with route-based pages and service modules for Appwrite integration.</p>
+
+    <h2>14. Module Description</h2>
+    <h3>Authentication Module</h3>
+    <p>This module handles user login and session state. It uses Appwrite Account methods and Redux actions to maintain login status. It also manages route protection for logged-in users.</p>
+    <h3>Post Management Module</h3>
+    <p>This module includes blog creation, listing, detail display, editing, and deletion. It interacts with Appwrite TablesDB and the storage bucket for image files.</p>
+    <h3>Routing and Navigation Module</h3>
+    <p>This module manages access to pages using React Router and the AuthLayout component. It redirects unauthenticated users away from protected pages.</p>
+    <h3>UI Component Module</h3>
+    <p>The project includes reusable components such as Header, Footer, Button, Input, Logo, Select, RTE, and PostCard. These reduce code duplication and ensure consistent design.</p>
+    <h3>State Management Module</h3>
+    <p>The AuthSlice manages authentication state, including whether the user is logged in and which user data is stored.</p>
+
+    <h2>15. System Workflow / Data Flow</h2>
+    <ol>
+      <li>A user opens the application.</li>
+      <li>The app loads the global auth state from Redux and checks the current session.</li>
+      <li>If the user is authenticated, navigation and page access are adjusted accordingly.</li>
+      <li>On login, the form sends credentials to Appwrite.</li>
+      <li>If the credentials are valid, Appwrite returns a session and the app updates Redux state.</li>
+      <li>On creating a post, the form captures title, content, status, and image.</li>
+      <li>The selected image is uploaded to Appwrite storage.</li>
+      <li>Post metadata is stored in the Appwrite table using a row identifier, often derived from the slug.</li>
+      <li>The app retrieves posts from the database and renders them on the home or all-posts pages.</li>
+      <li>On viewing a post, the detail page checks whether the current user is the author and shows edit/delete controls.</li>
+      <li>The UI is updated after each successful interaction.</li>
+    </ol>
+
+    <h2>16. Database / Data Management</h2>
+    <p>The project does not implement a standalone custom database. Instead, it uses Appwrite as its backend data layer. The application uses Appwrite TablesDB to store rows representing blog posts. Based on the implementation, the important post-related fields used are:</p>
+    <ul>
+      <li>title</li>
+      <li>content</li>
+      <li>featuredImage</li>
+      <li>status</li>
+      <li>userId</li>
+    </ul>
+    <p>The app interacts with the database through methods like createPost, updatePost, deletePost, getPost, and getPosts. It also uses Appwrite Storage to upload and manage image files associated with posts.</p>
+
+    <h2>17. Authentication and Authorization</h2>
+    <p>Authentication is implemented using Appwrite Account APIs. The login form sends email and password to createEmailPasswordSession, and the current user is retrieved through account.get(). The session state is stored in Redux using the login and logout actions.</p>
+    <p>Authorization is implemented in a limited client-side manner:</p>
+    <ul>
+      <li>Route protection is done using the AuthLayout component.</li>
+      <li>Authenticated routes require authentication = true.</li>
+      <li>On the individual post page, the author is determined by comparing post.userId to the current user’s $id.</li>
+      <li>Edit and delete buttons are displayed only when the user matches the post author.</li>
+    </ul>
+
+    <h2>18. Algorithms and Core Logic</h2>
+    <p>The project does not rely on advanced computational algorithms. The main logic is based on:</p>
+    <ul>
+      <li>Authentication state management in Redux</li>
+      <li>Slug generation for blog post URLs</li>
+      <li>Route protection logic</li>
+      <li>CRUD workflow through Appwrite service methods</li>
+    </ul>
+
+    <h2>19. API / External Service Integration</h2>
+    <ul>
+      <li><strong>Appwrite:</strong> Purpose: Authentication, database storage, file storage, session management. Integration method: JavaScript SDK imported as appwrite. Data handled: user accounts, sessions, blog rows, image files.</li>
+    </ul>
+
+    <h2>20. User Interface and User Experience</h2>
+    <p>The application uses a clean and minimal UI built with reusable React components and Tailwind CSS classes. The main interface includes:</p>
+    <ul>
+      <li>Header with conditional navigation links</li>
+      <li>Footer</li>
+      <li>Home page with post cards</li>
+      <li>Login page with email and password form</li>
+      <li>Signup page with user registration form</li>
+      <li>Post detail page with article content and optional edit/delete actions</li>
+      <li>Post creation/editing form with rich text area and file upload</li>
+      <li>Status selection for active/inactive posts</li>
+    </ul>
+
+    <h2>21. Security Considerations</h2>
+    <p>The following security-related mechanisms are implemented:</p>
+    <ul>
+      <li>Appwrite-based authentication</li>
+      <li>Session-based user tracking</li>
+      <li>Protected routes based on authentication state</li>
+      <li>Author-based access control for editing and deleting posts</li>
+      <li>Environment variables for Appwrite configuration</li>
+    </ul>
+
+    <h2>22. Testing and Validation</h2>
+    <p>At the repository level, no automated testing framework or test files were found. The project was validated by a successful Vite production build using npm run build.</p>
+
+    <h2>23. Expected/Actual Results</h2>
+    <p>The application is expected to provide a functional blog platform where authenticated users can manage content and public users can view posts. Based on the implementation, the project currently achieves login, content creation, post listing, image upload, and author-based edit/delete actions. However, the codebase also has certain limitations, particularly in the signup flow and some partial logic in the UI and route handling.</p>
+
+    <h2>24. Advantages</h2>
+    <ul>
+      <li>Simplified content management using a BaaS approach</li>
+      <li>Reduced backend development effort</li>
+      <li>Reusable UI components</li>
+      <li>Efficient state handling with Redux Toolkit</li>
+      <li>Convenient Appwrite storage for post media</li>
+      <li>Easy route-based separation of public and authenticated pages</li>
+    </ul>
+
+    <h2>25. Limitations</h2>
+    <ul>
+      <li>Signup functionality is not fully connected to Appwrite account creation</li>
+      <li>Access control is primarily client-side rather than server-enforced</li>
+      <li>No automated testing suite exists</li>
+      <li>No custom backend or API server is present</li>
+      <li>Some code contains minor logic issues and partial implementations</li>
+      <li>No deployment configuration or hosting instructions are included</li>
+    </ul>
+
+    <h2>26. Future Scope</h2>
+    <ul>
+      <li>Fixing and completing the signup flow</li>
+      <li>Adding role-based access control</li>
+      <li>Implementing search and category filtering</li>
+      <li>Adding comments and likes</li>
+      <li>Improving validation and error messaging</li>
+      <li>Adding automated testing</li>
+      <li>Preparing deployment to a live hosting platform</li>
+    </ul>
+
+    <h2>27. Conclusion</h2>
+    <p>The project presents a practical blog application built using React and Appwrite, demonstrating core web application concepts such as frontend routing, state management, component-based design, authentication, and cloud-based content storage. It addresses the need for a lightweight content management workflow while keeping the implementation academically manageable and technically relevant to a B.Tech Computer Science curriculum. The system is useful as a learning project and as a working prototype for blog publishing, but it also has real limitations that must be acknowledged, particularly around the signup flow and the absence of full security and testing coverage.</p>
+
+    <h2>28. References</h2>
+    <ul>
+      <li>React Documentation: https://react.dev</li>
+      <li>Vite Documentation: https://vite.dev</li>
+      <li>React Router Documentation: https://reactrouter.com</li>
+      <li>Redux Toolkit Documentation: https://redux-toolkit.js.org</li>
+      <li>React Hook Form Documentation: https://react-hook-form.com</li>
+      <li>TinyMCE Documentation: https://www.tiny.cloud/docs</li>
+      <li>Appwrite Documentation: https://appwrite.io/docs</li>
+      <li>Tailwind CSS Documentation: https://tailwindcss.com/docs</li>
+    </ul>
+
+    <h2>Information Requiring Confirmation</h2>
+    <ol>
+      <li>Whether the current Appwrite project instance is already provisioned and whether the environment variables correspond to a live deployment or a local development setup.</li>
+      <li>Whether the signup flow is intended to be fixed before final submission, or whether the project should be documented as a partially implemented prototype.</li>
+    </ol>
+  </div>
+</body>
+</html>

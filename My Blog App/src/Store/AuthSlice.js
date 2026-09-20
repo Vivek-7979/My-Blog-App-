@@ -1,35 +1,31 @@
-// File de andar kya hai oh important hunda na ki file app kithe hai ... File kite bhi ho sakdi hai bs usde andar jo likhya wa hai oh zaruri hai 
+import { createSlice } from "@reduxjs/toolkit";
 
-import {createSlice} from "@reduxjs/toolkit"
-
-
-//  Intially what the states will be look like . As , RTK is a state managemenet library 
 const initialState = {
-
-    status : false , 
-    userData: null 
-}
+    status: false,
+    userData: null,
+};
 
 const authSlice = createSlice({
-
-    name:"auth",
+    name: "auth",
     initialState,
+    reducers: {
+        login: (state, action) => {
+            const userData =
+                action.payload && typeof action.payload === "object" && "userData" in action.payload
+                    ? action.payload.userData
+                    : action.payload ?? null;
 
-    // Slice is created . In which reducers are there . In which , reducers means : the function or the methods that will keep track of the state with the help of action's payload .
-    reducers : {
-
-        login: (state , action ) => {
-            state.status = true ;
-            state.userData = action.payload.userData;
+            state.status = Boolean(userData);
+            state.userData = userData;
         },
 
         logout: (state) => {
-            state.status = false ; 
-            state.userData = null ;
-        }
-    }
-})
+            state.status = false;
+            state.userData = null;
+        },
+    },
+});
 
-export const { login , logout } = authSlice.actions ;   // This is the syntax have to do it like this
+export const { login, logout } = authSlice.actions;
 
-export default authSlice.reducer ; 
+export default authSlice.reducer;

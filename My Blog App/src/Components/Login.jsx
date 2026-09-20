@@ -25,18 +25,22 @@ function Login() {
 
         try {
             const session = await authService.login(data)
-               if (session ) {
-                const userData = await authService.getCurrentuser()  // je taah session haiga matlab user login ho gya taah teh user da data get  karo 
+            if (session) {
+                const userData = await authService.getCurrentuser()
 
-                if(userData) dispatch(authLogin(userData))           // je userData mil gya taah ohnu login karvado store nu dske ki haan ok ga kaam . Login krdo taah ki state update ho jawe 
-                 navigate('/')                                       // Hun login hone toh baad user nu automatically main home page pr navigate krvado    
+                if (userData) {
+                    dispatch(authLogin({ userData }))
+                    navigate('/')
+                }
             }
 
-        } catch (error) { setError.message }
+        } catch (error) {
+            setError(error.message || 'Login failed. Please try again.')
+        }
     }
   return (
 
-<div className='flex items-center justify-center w-full'>
+<div className='flex items-center justify-center w-full mt-10 mb-10'>
       
  <div className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
 
@@ -48,7 +52,7 @@ function Login() {
 
         </div>
 
-        <h2 className="text-center text-2xl font-bold leading-tight">Sign in to your account</h2>
+        <h2 className="text-center text-2xl font-bold leading-tight">Login in to your account</h2>
 
         <p className="mt-2 text-center text-base text-black/60">
                     Don&apos;t have any account?&nbsp;

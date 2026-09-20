@@ -24,20 +24,24 @@ const create = async(data) => {
     setError('')
 
     try {
+        const session = await authService.createAccount(data)
 
-        const userData = await authService.getCurrentuser()  // Using the async await as if the data fetchinng takes time the other work still does as usual and when we got the response display it 
-        if(userData) dispatch (login(userData));  // Sending the wiritten data in the store 
-        navigate('/')   // Automatically navigation to the home page after the succesfull login 
-        
+        if (session) {
+            const userData = await authService.getCurrentuser()
+            if (userData) {
+                dispatch(login({ userData }))
+            }
+            navigate('/')
+        }
     } catch (error) {
-       setError(error.message) 
+       setError(error.message || 'Account creation failed. Please try again.')
     }
 }
 
 
   
   return (
-    <div className="flex items-center justify-center">
+    <div className="flex items-center justify-center mt-10 ">
             <div className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
 
 

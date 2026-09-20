@@ -80,9 +80,12 @@ const router = createBrowserRouter([
 
     {
       path:'/post/:slug', 
-      element: <Post /> 
-
-    },                     {/* Eh oh page ga jis vich kehnde ge ki -> post howe ohdi user di oh khud author howe usda  taah show kro delete and edit ala button and oh walapage  */}
+      element: (
+        <AuthLayout authentication={true}>
+          <Post />
+        </AuthLayout>
+      )
+    },
 
     ] ,
   },

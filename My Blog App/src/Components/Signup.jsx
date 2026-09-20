@@ -14,6 +14,7 @@ function Signup() {
 
 const navigate = useNavigate()  //to forcefully navigate after succesfull navigation
 const [error , setError ] = useState('')
+const [success , setSuccess ] = useState('')
 const dispatch = useDispatch()
 const {register , handleSubmit } = useForm()  // This is from the react-hook-library syntax
 
@@ -22,16 +23,21 @@ const {register , handleSubmit } = useForm()  // This is from the react-hook-lib
 // Creating the function / logic for the creating account / signup Process
 const create = async(data) => {
     setError('')
+    setSuccess('')
 
     try {
-        const session = await authService.createAccount(data)
+        if (await authService.hasActiveSession()) {
+            navigate('/', { replace: true })
+            return
+        }
 
-        if (session) {
-            const userData = await authService.getCurrentuser()
-            if (userData) {
-                dispatch(login({ userData }))
-            }
-            navigate('/')
+        const userAccount = await authService.createAccount(data)
+
+        if (userAccount) {
+            setSuccess('Account created successfully. Please log in.')
+            setTimeout(() => {
+                navigate('/login', { replace: true })
+            }, 800)
         }
     } catch (error) {
        setError(error.message || 'Account creation failed. Please try again.')
@@ -69,6 +75,7 @@ const create = async(data) => {
                 </p>
 
                 {error && <p className="text-red-600 mt-8 text-center">{error}</p>}  {/* If there is error then display error best practice to do it like if the one statement runs then only the other runs  */}
+                {success && <p className="text-green-600 mt-8 text-center">{success}</p>}
 
                 <form onSubmit={handleSubmit(create)}>
 

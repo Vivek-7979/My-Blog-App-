@@ -13,22 +13,6 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    const hasSessionCookie = () => {
-      try {
-        return !!document.cookie && document.cookie.split(';').some((cookie) =>
-          cookie.trim().startsWith('a_session_') || cookie.trim().startsWith('appwrite-session')
-        );
-      } catch (error) {
-        return false;
-      }
-    };
-
-    if (!hasSessionCookie()) {
-      dispatch(logout());
-      setLoading(false);
-      return;
-    }
-
     authService
       .getCurrentuser()
       .then((userData) => {

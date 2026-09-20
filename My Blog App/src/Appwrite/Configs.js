@@ -16,23 +16,26 @@ export class Service {
         this.bucket = new Storage (this.client); }
    
 // Method to create a Blog Post 
-async createPost ({title , slug , content , featuredImage , status , userId }){
+async createPost ({title , slug , content , featuredImage = '', status = 'active', userId }){
 
     try {
+        const rowId = slug || ID.unique();
+
         return await this.tables.createRow({
             databaseId: config.appwriteDatabaseId,
             tableId: config.appwriteCollectionId,
-            rowId: slug,
-            data: { title, content, featuredImage, status, userId },
+            rowId,
+            data: { title, slug: slug || rowId, content, featuredImage, status, userId },
         });
     } catch (error) {
         console.log('Appwrite service :: createPost :: error' , error )
+        return false;
     }
 
 }
 
 // Method to update the Post 
-async updatePost (slug , {title , content , featuredImage, status , }){
+async updatePost (slug , {title , slug: updatedSlug, content , featuredImage = '', status }){
     
     try {
 
@@ -40,12 +43,13 @@ async updatePost (slug , {title , content , featuredImage, status , }){
             databaseId: config.appwriteDatabaseId,
             tableId: config.appwriteCollectionId,
             rowId: slug,
-            data: { title, content, featuredImage, status },
+            data: { title, slug: updatedSlug || slug, content, featuredImage, status },
         });
 
     }
        catch (error) {
         console.log('Appwrite service :: updatePost :: error' , error )
+        return false;
         }
 
 }

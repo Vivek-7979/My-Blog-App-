@@ -24,13 +24,20 @@ function Login() {
         setError('')
 
         try {
+            if (await authService.hasActiveSession()) {
+                navigate('/', { replace: true })
+                return
+            }
+
             const session = await authService.login(data)
             if (session) {
-                const userData = await authService.getCurrentuser()
+                const userData = await authService.getCurrentuser(5)
 
                 if (userData) {
                     dispatch(authLogin({ userData }))
-                    navigate('/')
+                    navigate('/', { replace: true })
+                } else {
+                    setError('Login succeeded, but the session is still being restored. Please refresh the page.')
                 }
             }
 

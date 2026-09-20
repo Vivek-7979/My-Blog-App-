@@ -2,6 +2,7 @@
 
 import React from 'react'
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import authService from '../../Appwrite/Auth_service'
 import { logout } from '../../Store/AuthSlice'
 
@@ -9,11 +10,13 @@ function LogoutBtn() {
 
     // THE JS 
  const dispatch = useDispatch()     // To dispatch the data of the logout to update the state or the latest data in the store 
+ const navigate = useNavigate()
 
  // On clicking the logout button this handler will run 
  const logoutHandler = () => {
-    authService.logout().then(() => {   // From the AuthService file we used the logout method/reducer whose functionlaity is already defined in it . { But NOTE this method returns us a promise and we have to handle it in this file }
+    authService.logout().finally(() => {
         dispatch(logout())
+        navigate('/login', { replace: true })
     })
  }
   return (

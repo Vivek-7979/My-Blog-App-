@@ -28,59 +28,67 @@ const submit = async (data) => {
     return;
   }
 
-  if (post) {  // je taah post pehla toh hi hai mtlb uploaded post nu update karna 
+  const title = data.title?.trim();
+  const slug = (data.slug || slugTransform(title || '')).trim();
 
-    const file = data.image[0] ? appwriteService.uploadFile(data.image[0]) : null  // je teh image haigi hai sara data vicho taah image oh chk ke array di 1st hai jo ohnu upload krvado appwrite de database vicho 
-    
-
-           if(file) {  // Hun image haigi hai teh oh upload bhi krva diti database vicho chak ke .. Ohnu file naam de dita va 
-               appwriteService.deleteFile(post.featuredImage)  // hun oh file nu delete kr dena apa neh jehri upload kiti c bcz tah hi fir navi upload honii 
-           }
-
-           const dbPost = await appwriteService.updatePost ( post.$id , {
-                              ...data,
-                              featuredImage : file? file.$id : undefined ,
-           }) // is vich hun apa updatepost ala method call krvaya AuthSerive ali file vicho jo ki values le reha jehri ohnu chaidi hai and update krunga post apne logic naal 
-            
-            if ( dbPost) ( navigate (`post/${dbPost.$id}`))  // je teh ho rehi a post update dbvicho then ohnu oh specifc id ute jo route pr hai uthe navigate krvado 
-  
-          }     
-
-else {   //Simple -> je teh post hai hi nhi isda matlab hai ki new post upload honi tah apa appwriteService use krde hoye fresh post upload karni 
- 
-  const file = await appwriteService.uploadFile(data.image[0]);  // file upload kr diti apa post jehri pauni 
- 
-  if(file) {
-
-    const fileId = file.$id
-    data.featuredImage = fileId  // jo apa appwrite vich image nu keha va ga oh keh dita va ga ffeatured image nu 
-
-    const dbPost = await appwriteService.createPost({
-      ...data ,
-      userId: userData.$id,
-    }) // Hun create post through naal userData redux naal data de dita 
-
-      if(dbPost) { navigate(`/post/${dbPost.$id}`)}  // Hun post jado create ho gyie vi gi taah ohnu redirecct krvado oh specific route pr
+  if (!title || !slug) {
+    return;
   }
 
-}
+  if (post) {
+    const file = data.image && data.image[0]
+      ? await appwriteService.uploadFile(data.image[0])
+      : null;
 
-}  
+    if (file && post.featuredImage) {
+      appwriteService.deleteFile(post.featuredImage);
+    }
+
+    const dbPost = await appwriteService.updatePost(post.$id, {
+      ...data,
+      title,
+      slug,
+      featuredImage: file ? file.$id : (post.featuredImage || ''),
+      status: data.status || 'active',
+    });
+
+    if (dbPost) {
+      navigate(`/post/${dbPost.slug || dbPost.$id}`);
+    }
+  } else {
+    const file = data.image && data.image[0]
+      ? await appwriteService.uploadFile(data.image[0])
+      : null;
+
+    const dbPost = await appwriteService.createPost({
+      ...data,
+      title,
+      slug,
+      content: data.content || '',
+      featuredImage: file ? file.$id : '',
+      status: data.status || 'active',
+      userId: userData.$id,
+    });
+
+    if (dbPost) {
+      navigate(`/post/${dbPost.slug || dbPost.$id}`);
+    }
+  }
+};
 
 // This is a functionality in which if we write the title and give space between them then the slug value box will conveert that space into dash "-" . UseCallback is used because :- To want the memoization in which the component will not re-render as only if the some values are changed in the input box it stores that value in the rowser's memory / cache 
 // by the way -> It is the senior level interview question . That how we will use this slugForm
 const slugTransform = useCallback((value) => {
-
-  if( value && typeof value === 'string' ){
-    return value 
-    .trim()
-    .toLowerCase()                       // triming and converting the title that is the string value into the lowercase letters all 
-    .replace(/^[a-zA-Z\d\s]+/g , '-')   // This is teh regex value it recognizes some pattern . like in this ; it replaces teh space,special characters with the "-" .
-    .replace(/\s/g, '-')
-
-    return ''
+  if (!value || typeof value !== 'string') {
+    return '';
   }
-}  , [] )
+
+  return value
+    .trim()
+    .toLowerCase()
+    .replace(/\s+/g, '-')
+    .replace(/[^a-z0-9-]+/g, '');
+}, []);
 
 
 

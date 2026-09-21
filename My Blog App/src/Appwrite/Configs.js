@@ -144,20 +144,24 @@ async getPost(slug){
             queries: [Query.equal('slug', slug)],
         });
 
-        return this.normalizeRow(response?.rows?.[0]) || false;
+        const rowFromSlug = this.normalizeRow(response?.rows?.[0] || response?.documents?.[0]);
+        if (rowFromSlug) {
+            return rowFromSlug;
+        }
     } catch (error) {
         console.log(' Appwrite serive :: getPost :: error' , error );
-        try {
-            const row = await this.tables.getRow({
-                databaseId: config.appwriteDatabaseId,
-                tableId: config.appwriteCollectionId,
-                rowId: slug,
-            });
-            return this.normalizeRow(row) || false;
-        } catch (fallbackError) {
-            console.log(' Appwrite serive :: getPost :: fallback error' , fallbackError );
-            return false;
-        }
+    }
+
+    try {
+        const row = await this.tables.getRow({
+            databaseId: config.appwriteDatabaseId,
+            tableId: config.appwriteCollectionId,
+            rowId: slug,
+        });
+        return this.normalizeRow(row) || false;
+    } catch (fallbackError) {
+        console.log(' Appwrite serive :: getPost :: fallback error' , fallbackError );
+        return false;
     }
   }
 

@@ -7,23 +7,24 @@ import {useNavigate ,useParams} from 'react-router-dom'
 
 function EditPost() {
 
-    const [post , setPosts ] = useState([])
-    const {slug} = useParams()   // to get the values form the url 
+    const [post, setPost] = useState(null)
+    const { slug } = useParams()
     const navigate = useNavigate()
 
+    useEffect(() => {
+        if (slug) {
+            appwriteService.getPost(slug).then((postData) => {
+                if (postData) {
+                    setPost(postData)
+                    return
+                }
 
-useEffect(()=> {
-    if(slug){
-        appwriteService.getPost(slug.then((post) =>{
-
-      if(post){
-        setPosts(post)
-      }
-    }) )
-    } 
-    else { navigate('/')}
-
-} ,[] )
+                navigate('/')
+            }).catch(() => navigate('/'))
+        } else {
+            navigate('/')
+        }
+    }, [slug, navigate])
 
   return  post ? (
 

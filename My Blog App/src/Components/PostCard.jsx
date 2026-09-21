@@ -1,27 +1,34 @@
-import React from 'react'
+import React, { useState } from 'react'
 import appwriteService from '../Appwrite/Configs'
 import { Link } from 'react-router-dom'
 
+function PostCard({ $id, slug, title, featuredImage, content }) {
+  const [imageError, setImageError] = useState(false);
+  const postSlug = slug || $id;
+  const excerpt = typeof content === 'string'
+    ? content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim().slice(0, 120)
+    : '';
 
-function PostCard({ $id , title , featuredImage }) {
   return (
-    
-<Link to={`/post/ ${id}`}>
+    <Link to={`/post/${postSlug}`}>
+      <div className='w-full bg-gray-100 rounded-xl p-4 h-full'>
+        <div className='w-full justify-center mb-4'>
+          {featuredImage && !imageError ? (
+            <img
+              src={appwriteService.getFilePreview(featuredImage)}
+              alt={title || 'Post'}
+              onError={() => setImageError(true)}
+              className='rounded-xl w-full h-48 object-cover'
+            />
+          ) : (
+            <div className='w-full h-48 rounded-xl bg-gray-200 flex items-center justify-center text-gray-500'>No Image</div>
+          )}
+        </div>
 
-<div className='w-full bg-gray-100 rounded-xl p-4'>
-
-<div className='w-full justify-center mb-4'>
-
-    <img src={appwriteService.getFilePreview(featuredImage)}  alt={title} // Getting the image preview in the posts section and making this whole card specific cards 
-    className='rounded-xl'/>
-
-</div>
-
-<h2 className='text-xl font-bold' >  {title} </h2>
-
-</div>
-</Link>
-
+        <h2 className='text-xl font-bold mb-2'>{title}</h2>
+        {excerpt ? <p className='text-sm text-gray-700 line-clamp-3'>{excerpt}</p> : null}
+      </div>
+    </Link>
   )
 }
 

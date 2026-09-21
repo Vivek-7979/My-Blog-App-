@@ -21,9 +21,12 @@ function AllPosts() {
         const fetchPosts = async () => {
             try {
                 const postsData = await appwriteService.getPosts([]);
+                const rows = Array.isArray(postsData)
+                    ? postsData
+                    : postsData?.rows || postsData?.documents || [];
 
-                if (isMounted && postsData) {
-                    setPosts(postsData.rows || []);
+                if (isMounted) {
+                    setPosts(rows);
                 }
             } catch (error) {
                 console.error('AllPosts :: getPosts failed', error);
@@ -48,9 +51,9 @@ function AllPosts() {
     <div className='flex flex-wrap'> 
 
         {posts.map((post) => (
-
-            <div key={post.$id} className='p-2 w-1/4'> <PostCard post={post} /></div>
-        
+            <div key={post.$id} className='p-2 w-1/4'>
+                <PostCard {...post} />
+            </div>
         ))}
     </div>
     

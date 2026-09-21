@@ -14,22 +14,55 @@ export class Service {
         .setProject(config.appwriteProjectId);
         this.tables = new TablesDB(this.client);
         this.bucket = new Storage (this.client); }
+
+    normalizeRow(row) {
+        if (!row) return null;
+
+        if (row.data && typeof row.data === 'object' && !Array.isArray(row.data)) {
+            return {
+                ...row.data,
+                $id: row.$id,
+                $tableId: row.$tableId,
+                $databaseId: row.$databaseId,
+                $createdAt: row.$createdAt,
+                $updatedAt: row.$updatedAt,
+                $permissions: row.$permissions || [],
+            };
+        }
+
+        return row;
+    }
    
 // Method to create a Blog Post 
-async createPost ({title , slug , content , featuredImage = '', status = 'active', userId }){
+async createPost ({ title, slug, content, featuredImage = '', status = 'active', userId, image, ...rest }){
 
     try {
-        const rowId = slug || ID.unique();
+        const rowId = ID.unique();
+        const safeSlug = String(slug || title || 'post')
+            .trim()
+            .toLowerCase()
+            .replace(/\s+/g, '-')
+            .replace(/[^a-z0-9-]/g, '')
+            .slice(0, 36) || 'post';
+
+        const validData = {
+            title,
+            slug: safeSlug,
+            content,
+            featuredImage,
+            status,
+            userId,
+        };
 
         return await this.tables.createRow({
             databaseId: config.appwriteDatabaseId,
             tableId: config.appwriteCollectionId,
             rowId,
-            data: { title, slug: slug || rowId, content, featuredImage, status, userId },
+            data: validData,
         });
     } catch (error) {
-        console.log('Appwrite service :: createPost :: error' , error )
-        return false;
+        console.error('Appwrite service :: createPost :: error' , error )
+        throw error;
     }
 
 }
@@ -79,29 +112,49 @@ async deletePost (slug) {
 // Method to get the [ one specific-post ]  . Particular blog post  
 async getPost(slug){
     try {
-        return await this.tables.getRow({
+        if (!slug) {
+            return false;
+        }
+
+        const response = await this.tables.listRows({
             databaseId: config.appwriteDatabaseId,
             tableId: config.appwriteCollectionId,
-            rowId: slug,
+            queries: [Query.equal('slug', slug)],
         });
+
+        return this.normalizeRow(response?.rows?.[0]) || false;
     } catch (error) {
         console.log(' Appwrite serive :: getPost :: error' , error );
-        return false 
+        try {
+            const row = await this.tables.getRow({
+                databaseId: config.appwriteDatabaseId,
+                tableId: config.appwriteCollectionId,
+                rowId: slug,
+            });
+            return this.normalizeRow(row) || false;
+        } catch (fallbackError) {
+            console.log(' Appwrite serive :: getPost :: fallback error' , fallbackError );
+            return false;
+        }
     }
   }
 
   // Queries on database . Because to get all the posts in the table to showcase all the them on the blog app . { we used queries because we want only the specific post whose status are active }
-  async getPosts (queries = [ Query.equal('status', 'active' ) ]  ) {  // this queries argument and all thing is the part of the appwrite . And this is written in appwrite's document . So , don't worry about it as it is the part of the appwrite documentation
+  async getPosts (queries = [ Query.equal('status', 'active' ) ]  ) {
 
     try {
-        return await this.tables.listRows({
+        const safeQueries = Array.isArray(queries) ? queries : [ Query.equal('status', 'active') ];
+        const response = await this.tables.listRows({
             databaseId: config.appwriteDatabaseId,
             tableId: config.appwriteCollectionId,
-            queries,
+            queries: safeQueries,
         });
+
+        const rows = response?.rows ?? response?.documents ?? [];
+        return rows.map((row) => this.normalizeRow(row)).filter(Boolean);
     } catch (error) {
         console.log(' Appwrite serive :: getPosts :: error' , error );
-        return false 
+        return [];
     }
   }
 
@@ -110,10 +163,15 @@ async getPost(slug){
   async uploadFile(file){
 
     try {
+        if (!file) {
+            return false;
+        }
+
         return await this.bucket.createFile({
             bucketId: config.appwriteBucketId,
             fileId: ID.unique(),
             file,
+            permissions: ["read(\"any\")"],
         });
         
     } catch (error) {
@@ -144,9 +202,16 @@ async deleteFile(fileId){
 
 // Method to preview the file . This is the feature given by the appWrite Service whose response is very fast 
 getFilePreview(fileId){
+    if (!fileId) {
+        return '';
+    }
+
     return this.bucket.getFilePreview({
         bucketId: config.appwriteBucketId,
         fileId,
+        width: 1200,
+        height: 700,
+        quality: 90,
     });
 }
 

@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 
 export default function Post() {
     const [post, setPost] = useState(null);
+    const [imageError, setImageError] = useState(false);
     const { slug } = useParams();
     const navigate = useNavigate();
 
@@ -37,11 +38,16 @@ export default function Post() {
         <div className="py-8">
             <Container>
                 <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
-                    <img
-                        src={appwriteService.getFilePreview(post.featuredImage)}
-                        alt={post.title}
-                        className="rounded-xl"
-                    />
+                    {post.featuredImage && !imageError ? (
+                        <img
+                            src={appwriteService.getFilePreview(post.featuredImage)}
+                            alt={post.title}
+                            onError={() => setImageError(true)}
+                            className="rounded-xl"
+                        />
+                    ) : (
+                        <div className="w-full h-80 rounded-xl bg-gray-200 flex items-center justify-center text-gray-500">No Image</div>
+                    )}
 
                     {isAuthor && (
                         <div className="absolute right-6 top-6">

@@ -4,10 +4,10 @@
 import React from 'react';
 import { Editor } from '@tinymce/tinymce-react';
 import { Controller } from 'react-hook-form';
-
+import config from '../Config/Config';
 
 export default function RTE({name , control , label , defaultValue ='' } ) {  // Eh Component toh form ch transfer krne vaste sade kol hai "control" jo ki react-hook-form da part haii 
-
+  const tinymceApiKey = config.tinymceAPIkey || '';
 
   return (
   
@@ -20,7 +20,7 @@ export default function RTE({name , control , label , defaultValue ='' } ) {  //
     control={control}
     render={({ field: { onChange, value } }) => (
       <Editor
-        apiKey='48gpo4pmdfkbwb5i4rx628tuqek5h8g7n9y1v6bzxrlo4i5c'
+        apiKey={tinymceApiKey}
         value={value || defaultValue}
         initialValue={defaultValue}
         onEditorChange={(content) => onChange(content)}
@@ -48,8 +48,9 @@ export default function RTE({name , control , label , defaultValue ='' } ) {  //
             { value: 'Email', title: 'Email' },
           ],
           tinymceai_token_provider: async () => {
-            await fetch(`https://demo.api.tiny.cloud/1/48gpo4pmdfkbwb5i4rx628tuqek5h8g7n9y1v6bzxrlo4i5c/auth/random`, { method: 'POST', credentials: 'include' });
-            return { token: await fetch(`https://demo.api.tiny.cloud/1/48gpo4pmdfkbwb5i4rx628tuqek5h8g7n9y1v6bzxrlo4i5c/jwt/tinymceai`, { credentials: 'include' }).then(r => r.text()) };
+            if (!tinymceApiKey) return { token: '' };
+            await fetch(`https://demo.api.tiny.cloud/1/${tinymceApiKey}/auth/random`, { method: 'POST', credentials: 'include' });
+            return { token: await fetch(`https://demo.api.tiny.cloud/1/${tinymceApiKey}/jwt/tinymceai`, { credentials: 'include' }).then(r => r.text()) };
           },
           uploadcare_public_key: '3d47f462ae55bd7cc7cb',
           height: 500,

@@ -20,9 +20,12 @@ function Home() {
     const fetchPosts = async () => {
       try {
         const postsData = await appwriteService.getPosts();
+        const rows = Array.isArray(postsData)
+          ? postsData
+          : postsData?.rows || postsData?.documents || [];
 
-        if (isMounted && postsData) {
-          setPosts(postsData.rows || []);
+        if (isMounted) {
+          setPosts(rows);
         }
       } catch (error) {
         console.error('Home :: getPosts failed', error);

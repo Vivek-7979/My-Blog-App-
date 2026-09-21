@@ -1,4 +1,4 @@
-import React ,{useCallback , useEffect} from 'react'
+import React ,{useCallback , useEffect, useState} from 'react'
 import { useForm } from 'react-hook-form'
 import {Button , Input , Select , RTE } from '../Index'
 import appwriteService from '../../Appwrite/Configs'
@@ -6,6 +6,7 @@ import { data, useNavigate } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 
 function PostForm({post}) {
+  const [submitError, setSubmitError] = useState('');
 
 const { register , handleSubmit , watch , setValue , control , getValues } = 
 useForm({
@@ -23,6 +24,8 @@ const userData = useSelector((state) => state.auth?.userData)    // The applicat
 
 // method jihde naal post update ya new create honi 
 const submit = async (data) => {
+  setSubmitError('');
+
   if (!userData?.$id) {
     navigate('/login', { replace: true });
     return;
@@ -32,47 +35,64 @@ const submit = async (data) => {
   const slug = (data.slug || slugTransform(title || '')).trim();
 
   if (!title || !slug) {
+    setSubmitError('Title and slug are required.');
     return;
   }
 
-  if (post) {
+  try {
+    if (post) {
+      const file = data.image && data.image[0]
+        ? await appwriteService.uploadFile(data.image[0])
+        : null;
+
+      if (file && post.featuredImage) {
+        appwriteService.deleteFile(post.featuredImage);
+      }
+
+      const dbPost = await appwriteService.updatePost(post.$id, {
+        ...data,
+        title,
+        slug,
+        featuredImage: file ? file.$id : (post.featuredImage || ''),
+        status: data.status || 'active',
+      });
+
+      if (dbPost) {
+        navigate(`/post/${dbPost.slug || dbPost.$id}`);
+        return;
+      }
+
+      setSubmitError('Failed to update the post. Please check Appwrite table data and permissions.');
+      return;
+    }
+
     const file = data.image && data.image[0]
       ? await appwriteService.uploadFile(data.image[0])
       : null;
 
-    if (file && post.featuredImage) {
-      appwriteService.deleteFile(post.featuredImage);
+    if (data.image && data.image[0] && !file) {
+      throw new Error('Featured image upload failed.');
     }
-
-    const dbPost = await appwriteService.updatePost(post.$id, {
-      ...data,
-      title,
-      slug,
-      featuredImage: file ? file.$id : (post.featuredImage || ''),
-      status: data.status || 'active',
-    });
-
-    if (dbPost) {
-      navigate(`/post/${dbPost.slug || dbPost.$id}`);
-    }
-  } else {
-    const file = data.image && data.image[0]
-      ? await appwriteService.uploadFile(data.image[0])
-      : null;
 
     const dbPost = await appwriteService.createPost({
-      ...data,
       title,
       slug,
       content: data.content || '',
       featuredImage: file ? file.$id : '',
       status: data.status || 'active',
       userId: userData.$id,
+      image: data.image,
     });
 
     if (dbPost) {
       navigate(`/post/${dbPost.slug || dbPost.$id}`);
+      return;
     }
+
+    setSubmitError('Failed to create the post. Appwrite row creation returned no data.');
+  } catch (error) {
+    console.error('PostForm :: submit failed', error);
+    setSubmitError(error?.message || 'Failed to save the post. Check Appwrite table and permissions.');
   }
 };
 
@@ -165,6 +185,12 @@ useEffect(() => {
                     className="mb-4"
                     {...register("status", { required: true })}
                 />
+
+               {submitError && (
+                  <div className="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                    {submitError}
+                  </div>
+               )}
 
                {/* The Button component we made  */}
                 <Button type="submit" bgColor={post ? "bg-green-500" : undefined} className="w-full">

@@ -15,11 +15,23 @@ export class Service {
         this.tables = new TablesDB(this.client);
         this.bucket = new Storage (this.client); }
 
+    getFileId(fileValue) {
+        if (!fileValue) {
+            return '';
+        }
+
+        if (typeof fileValue === 'object') {
+            return fileValue.$id || fileValue.fileId || fileValue.id || '';
+        }
+
+        return String(fileValue);
+    }
+
     normalizeRow(row) {
         if (!row) return null;
 
         if (row.data && typeof row.data === 'object' && !Array.isArray(row.data)) {
-            return {
+            const normalized = {
                 ...row.data,
                 $id: row.$id,
                 $tableId: row.$tableId,
@@ -28,6 +40,16 @@ export class Service {
                 $updatedAt: row.$updatedAt,
                 $permissions: row.$permissions || [],
             };
+
+            if (normalized.featuredImage) {
+                normalized.featuredImage = this.getFileId(normalized.featuredImage);
+            }
+
+            return normalized;
+        }
+
+        if (row.featuredImage) {
+            row.featuredImage = this.getFileId(row.featuredImage);
         }
 
         return row;
@@ -200,15 +222,30 @@ async deleteFile(fileId){
 }
 
 
+getFileView(fileId) {
+    const normalizedFileId = this.getFileId(fileId);
+
+    if (!normalizedFileId) {
+        return '';
+    }
+
+    return this.bucket.getFileView({
+        bucketId: config.appwriteBucketId,
+        fileId: normalizedFileId,
+    });
+}
+
 // Method to preview the file . This is the feature given by the appWrite Service whose response is very fast 
 getFilePreview(fileId){
-    if (!fileId) {
+    const normalizedFileId = this.getFileId(fileId);
+
+    if (!normalizedFileId) {
         return '';
     }
 
     return this.bucket.getFilePreview({
         bucketId: config.appwriteBucketId,
-        fileId,
+        fileId: normalizedFileId,
         width: 1200,
         height: 700,
         quality: 90,

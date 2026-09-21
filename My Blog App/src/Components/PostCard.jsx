@@ -9,13 +9,15 @@ function PostCard({ $id, slug, title, featuredImage, content }) {
     ? content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim().slice(0, 120)
     : '';
 
+  const imageSrc = appwriteService.getFileView(featuredImage) || appwriteService.getFilePreview(featuredImage);
+
   return (
     <Link to={`/post/${postSlug}`}>
       <div className='w-full bg-gray-100 rounded-xl p-4 h-full'>
         <div className='w-full justify-center mb-4'>
-          {featuredImage && !imageError ? (
+          {featuredImage && !imageError && imageSrc ? (
             <img
-              src={appwriteService.getFilePreview(featuredImage)}
+              src={imageSrc}
               alt={title || 'Post'}
               onError={() => setImageError(true)}
               className='rounded-xl w-full h-48 object-cover'

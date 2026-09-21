@@ -34,13 +34,15 @@ export default function Post() {
         });
     };
 
+    const imageSrc = appwriteService.getFileView(post?.featuredImage) || appwriteService.getFilePreview(post?.featuredImage);
+
     return post ? (
         <div className="py-8">
             <Container>
                 <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
-                    {post.featuredImage && !imageError ? (
+                    {post.featuredImage && !imageError && imageSrc ? (
                         <img
-                            src={appwriteService.getFilePreview(post.featuredImage)}
+                            src={imageSrc}
                             alt={post.title}
                             onError={() => setImageError(true)}
                             className="rounded-xl"

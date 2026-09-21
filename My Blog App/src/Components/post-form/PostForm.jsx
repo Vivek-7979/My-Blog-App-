@@ -169,10 +169,10 @@ useEffect(() => {
                     {...register("image", { required: !post })}
                 />
 
-                {post && (
+                {post && post.featuredImage && (
                     <div className="w-full mb-4">
                         <img
-                            src={appwriteService.getFilePreview(post.featuredImage)}
+                            src={appwriteService.getFileView(post.featuredImage) || appwriteService.getFilePreview(post.featuredImage)}
                             alt={post.title}
                             className="rounded-lg"
                         />

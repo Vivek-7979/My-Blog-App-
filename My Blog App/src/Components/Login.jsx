@@ -31,7 +31,8 @@ function Login() {
 
             const session = await authService.login(data)
             if (session) {
-                const userData = await authService.getCurrentuser(5)
+                await new Promise((resolve) => setTimeout(resolve, 200))
+                const userData = await authService.getCurrentuser()
 
                 if (userData) {
                     dispatch(authLogin({ userData }))
@@ -47,7 +48,7 @@ function Login() {
     }
   return (
 
-<div className='flex items-center justify-center w-full mt-10 mb-10'>
+<div className='flex items-center justify-center w-full  min-h-[calc(100dvh-72px)]'>
       
  <div className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
 
@@ -99,7 +100,7 @@ function Login() {
         {...register('password' , { required:true })} // Here the JS is written inside the {} . Then , we have spreaded the register and inside it we have given a key . Key like - password , email etc  and then we can also give the . 
         />
 
-        <Button type='submit' className='w-full' > Sign In </Button>
+        <Button type='submit' className='w-full cursor-pointer' > Sign In </Button>
             </div>
             
             </form>        

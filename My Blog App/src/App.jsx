@@ -13,22 +13,45 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    authService
-      .getCurrentuser()
-      .then((userData) => {
+    let ignore = false;
+
+    const syncAuthState = async () => {
+      try {
+        const userData = await authService.getCurrentuser();
+
+        if (ignore) {
+          return;
+        }
+
         if (userData) {
           dispatch(login({ userData }));
         } else {
           dispatch(logout());
         }
-      })
-      .catch((error) => {
-        if (error?.code !== 401) {
+      } catch (error) {
+        if (ignore) {
+          return;
+        }
+
+        const isUnauthenticated = error?.code === 401 || error?.type === 'user_unauthorized';
+
+        if (!isUnauthenticated) {
           console.error('App :: getCurrentuser failed', error);
         }
+
         dispatch(logout());
-      })
-      .finally(() => setLoading(false));
+      } finally {
+        if (!ignore) {
+          setLoading(false);
+        }
+      }
+    };
+
+    syncAuthState();
+
+    return () => {
+      ignore = true;
+    };
   }, [dispatch]);
 
   return (

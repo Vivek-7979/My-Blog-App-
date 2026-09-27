@@ -1,6 +1,8 @@
 import config from "../Config/Config";
 import { Client, Account, ID } from "appwrite";
 
+let currentUserRequest = null;
+
 export class AuthService {
     client = new Client();
     account;
@@ -62,28 +64,30 @@ export class AuthService {
         }
     }
 
-    async getCurrentuser(retries = 3) {
-        for (let attempt = 0; attempt <= retries; attempt += 1) {
+    async getCurrentuser() {
+        if (currentUserRequest) {
+            return currentUserRequest;
+        }
+
+        currentUserRequest = (async () => {
             try {
                 return await this.account.get();
             } catch (error) {
-                if (attempt === retries) {
-                    if (error?.code !== 401) {
-                        console.error('AuthService :: getCurrentuser :: error', error);
-                    }
-                    return null;
-                }
+                const isUnauthenticated = error?.code === 401 || error?.type === 'user_unauthorized';
 
-                if (error?.code === 401) {
-                    await new Promise((resolve) => setTimeout(resolve, 250));
-                    continue;
+                if (!isUnauthenticated) {
+                    console.error('AuthService :: getCurrentuser :: error', error);
                 }
 
                 return null;
             }
-        }
+        })();
 
-        return null;
+        try {
+            return await currentUserRequest;
+        } finally {
+            currentUserRequest = null;
+        }
     }
 
     async logout() {

@@ -47,8 +47,8 @@ const create = async(data) => {
 
   
   return (
-    <div className="flex items-center justify-center mt-10 ">
-            <div className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
+    <div className="flex items-center justify-center  ">
+            <div className={`mx-auto  w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
 
 
             {/* This div is for displaying he logo  */}
@@ -115,7 +115,7 @@ const create = async(data) => {
                         />
 
                         {/* Simple button  */}
-                        <Button type="submit" className="w-full">
+                        <Button type="submit" className="w-full ">
                             Create Account
                         </Button>
 

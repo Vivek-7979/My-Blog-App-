@@ -44,7 +44,7 @@ item.active ? (
 <li key={item.name}>                             {/* Key is the unique id we have to give it will using the manp function on the array  */}
 {                                                 /*  This navigate is got from the useNavigate of the react-router-dom */ }
   <button onClick={ () => navigate(item.URL)}    
-    className='inline-block px-6 py-2 duration-200 hover:bg-blue-100 rounded-full'>
+    className='inline-block px-6 py-2 duration-200 hover:bg-blue-100 rounded-full cursor-pointer'>
        {item.name}        {/* The name that will display in the li */}
        </button>
 </li>

@@ -6,7 +6,7 @@ import { Login as LoginComponent } from '../Components/Index'
 function Login() {
   return (
 
-    <div className='py-8'>
+    <div className='py-8 '>
 
         <LoginComponent/>
       

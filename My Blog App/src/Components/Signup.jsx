@@ -1,9 +1,7 @@
-import React  ,{useState} from 'react'
+import {useState} from 'react'
 import authService from '../Appwrite/Auth_service'
 import { Link , useNavigate } from 'react-router-dom'
-import { login } from '../Store/AuthSlice'
-import { Button ,Input , Logo} from './Index'
-import { useDispatch } from 'react-redux'
+import { Button ,Input , Logo, LoadingAnimation} from './Index'
 import { useForm } from 'react-hook-form'
 
 
@@ -15,7 +13,7 @@ function Signup() {
 const navigate = useNavigate()  //to forcefully navigate after succesfull navigation
 const [error , setError ] = useState('')
 const [success , setSuccess ] = useState('')
-const dispatch = useDispatch()
+const [isSubmitting, setIsSubmitting] = useState(false)
 const {register , handleSubmit } = useForm()  // This is from the react-hook-library syntax
 
 
@@ -24,6 +22,7 @@ const {register , handleSubmit } = useForm()  // This is from the react-hook-lib
 const create = async(data) => {
     setError('')
     setSuccess('')
+    setIsSubmitting(true)
 
     try {
         if (await authService.hasActiveSession()) {
@@ -35,12 +34,13 @@ const create = async(data) => {
 
         if (userAccount) {
             setSuccess('Account created successfully. Please log in.')
-            setTimeout(() => {
-                navigate('/login', { replace: true })
-            }, 800)
+            await new Promise((resolve) => setTimeout(resolve, 800))
+            navigate('/login', { replace: true })
         }
     } catch (error) {
        setError(error.message || 'Account creation failed. Please try again.')
+    } finally {
+        setIsSubmitting(false)
     }
 }
 
@@ -115,15 +115,17 @@ const create = async(data) => {
                         />
 
                         {/* Simple button  */}
-                        <Button type="submit" className="w-full ">
-                            Create Account
+                        <Button type="submit" disabled={isSubmitting} className={`w-full transition-transform duration-150 active:scale-[0.98] disabled:cursor-wait ${isSubmitting ? 'animate-pulse' : ''}`}>
+                            {isSubmitting ? 'Creating account...' : 'Create Account'}
                         </Button>
 
                     </div>
 
                 </form>
 
-            </div>
+                </div>
+
+                {isSubmitting && <LoadingAnimation className='fixed inset-0 z-50 bg-black/70' />}
 
     </div>
   )

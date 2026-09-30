@@ -14,6 +14,7 @@ import SignUp from "./SignUp";
 import Login from "./Login";
 import PostForm from "./post-form/PostForm";
 import AuthLayout from './AuthLayout'
+import LoadingAnimation from './LoadingAnimation'
 
 
 
@@ -31,5 +32,6 @@ export {
     SignUp,
     Login,
     PostForm,
-    AuthLayout
+    AuthLayout,
+    LoadingAnimation
 }

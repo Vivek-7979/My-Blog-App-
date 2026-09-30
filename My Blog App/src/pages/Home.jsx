@@ -1,24 +1,20 @@
 import { Link } from "react-router-dom";
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import appwriteService from '../Appwrite/Configs';
-import { Container, PostCard } from '../Components/Index';
+import { Container, PostCard, LoadingAnimation } from '../Components/Index';
 import blogImage from '../assets/blogImage.jpg'
 
 
 function Home() {
   const authStatus = useSelector((state) => Boolean(state.auth?.status));
   const [posts, setPosts] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     let isMounted = true;
 
-    if (!authStatus) {
-      setPosts([]);
-      return () => {
-        isMounted = false;
-      };
-    }
+    if (!authStatus) return;
 
     const fetchPosts = async () => {
       try {
@@ -34,6 +30,10 @@ function Home() {
         console.error('Home :: getPosts failed', error);
         if (isMounted) {
           setPosts([]);
+        }
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
         }
       }
     };
@@ -193,6 +193,9 @@ if (!authStatus) {
   );
 }
 
+  if (isLoading) {
+    return <LoadingAnimation className='w-full min-h-[calc(100dvh-72px)]' />;
+  }
 
   if (posts.length === 0) {
     return (

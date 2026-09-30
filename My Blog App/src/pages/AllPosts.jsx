@@ -1,22 +1,18 @@
-import React , {useState , useEffect} from 'react'
+import {useState , useEffect} from 'react'
 import { useSelector } from 'react-redux'
 import appwriteService from '../Appwrite/Configs'
-import { Container , PostCard } from '../Components/Index'
+import { Container , PostCard, LoadingAnimation } from '../Components/Index'
 
 function AllPosts() {
 
     const authStatus = useSelector((state) => Boolean(state.auth?.status));
     const [posts , setPosts ] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         let isMounted = true;
 
-        if (!authStatus) {
-            setPosts([]);
-            return () => {
-                isMounted = false;
-            };
-        }
+        if (!authStatus) return;
 
         const fetchPosts = async () => {
             try {
@@ -33,6 +29,10 @@ function AllPosts() {
                 if (isMounted) {
                     setPosts([]);
                 }
+            } finally {
+                if (isMounted) {
+                    setIsLoading(false);
+                }
             }
         };
 
@@ -45,6 +45,7 @@ function AllPosts() {
 
   return (
 
+        isLoading ? <LoadingAnimation className='w-full min-h-[calc(100dvh-72px)]' /> :
     <div className='w-full py-8'>
       
    <Container>

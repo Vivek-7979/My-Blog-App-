@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import './App.css';
-
 import authService from './Appwrite/Auth_service';
 import { login, logout } from './Store/AuthSlice';
 import { Footer, Header } from './Components/Index';
+import { LoadingAnimation } from './Components/Index';
 import { Outlet } from 'react-router-dom';
 
 
 function App() {
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -42,7 +42,7 @@ function App() {
         dispatch(logout());
       } finally {
         if (!ignore) {
-          setLoading(false);
+          setIsLoading(false);
         }
       }
     };
@@ -60,7 +60,7 @@ function App() {
         <Header />
 
         <main>
-          {loading ? <div className='p-8 text-center flex-1  text-white'>Loading...</div> : <Outlet />}
+          {isLoading ? <LoadingAnimation className='p-8 flex-1' /> : <Outlet />}
         </main>
 
         <Footer />

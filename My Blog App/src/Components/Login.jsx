@@ -1,10 +1,10 @@
 // This file is made for making the login form where name , password etc will be handled . It will be made from the advanced external form handing library for scalability . That is : - >  React-Hook-Form 
 
-import React ,{useState} from 'react'
+import {useState} from 'react'
 import { Link , useNavigate } from 'react-router-dom'
 import { login as authLogin } from '../Store/AuthSlice' // We named login method as authlogin in this file and where we write the authlogin it means login . We can also write the authlogin as the Storelogin
 import { useDispatch } from 'react-redux'
-import { Button , Input , Logo } from './Index'
+import { Button , Input , Logo, LoadingAnimation } from './Index'
 import authService from '../Appwrite/Auth_service'
 import {useForm} from 'react-hook-form'   // This is mainly what we are using in it for Advanced forms . React-hool-for. -> External reacr library to handle the forms 
 
@@ -16,12 +16,14 @@ function Login() {
     const dispatch = useDispatch()
     const { register , handleSubmit } = useForm() // Don't worry about this as this is the react-hook-form library's own syntax 
     const [error , setError ] = useState('')
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
 
     // Login Form logic 
     const login = async(data) => {
 
         setError('')
+        setIsSubmitting(true)
 
         try {
             if (await authService.hasActiveSession()) {
@@ -44,6 +46,8 @@ function Login() {
 
         } catch (error) {
             setError(error.message || 'Login failed. Please try again.')
+        } finally {
+            setIsSubmitting(false)
         }
     }
   return (
@@ -100,12 +104,14 @@ function Login() {
         {...register('password' , { required:true })} // Here the JS is written inside the {} . Then , we have spreaded the register and inside it we have given a key . Key like - password , email etc  and then we can also give the . 
         />
 
-        <Button type='submit' className='w-full cursor-pointer' > Sign In </Button>
+        <Button type='submit' disabled={isSubmitting} className={`w-full cursor-pointer transition-transform duration-150 active:scale-[0.98] disabled:cursor-wait ${isSubmitting ? 'animate-pulse' : ''}`} >{isSubmitting ? 'Signing in...' : 'Sign In'}</Button>
             </div>
             
             </form>        
 
     </div>
+
+    {isSubmitting && <LoadingAnimation className='fixed inset-0 z-50 bg-black/70' />}
 
 </div>
   )

@@ -1,7 +1,10 @@
 import {useState} from 'react'
 import authService from '../Appwrite/Auth_service'
 import { Link , useNavigate } from 'react-router-dom'
-import { Button ,Input , Logo, LoadingAnimation} from './Index'
+import Button from './Button'
+import Input from './Input'
+import Logo from './Logo'
+import LoadingAnimation from './LoadingAnimation'
 import { useForm } from 'react-hook-form'
 
 

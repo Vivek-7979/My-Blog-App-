@@ -10,7 +10,7 @@ import Button from './Button'
 import PostCard from "./PostCard";
 import Select from "./Select";
 import RTE from "./RTE";
-import SignUp from "./SignUp";
+import SignUp from "./Signup";
 import Login from "./Login";
 import PostForm from "./post-form/PostForm";
 import AuthLayout from './AuthLayout'

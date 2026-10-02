@@ -37,7 +37,7 @@ export default function Post() {
     const imageSrc = appwriteService.getFileView(post?.featuredImage) || appwriteService.getFilePreview(post?.featuredImage);
 
     return post ? (
-        <div className="py-8 ">
+        <div className="py-8 mt-20 ">
             <Container>
                 <div className="w-full flex justify-center mb-4 relative border rounded-xl p-2">
                     {post.featuredImage && !imageError && imageSrc ? (

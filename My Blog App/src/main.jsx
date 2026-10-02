@@ -5,14 +5,19 @@ import './index.css'
 import App from './App.jsx'
 import store from './Store/Store.js'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { AuthLayout , Login } from './Components/Index.js'
+import AuthLayout from './Components/AuthLayout.jsx'
+import LoadingAnimation from './Components/LoadingAnimation.jsx'
 
-import EditPost from './pages/EditPost.jsx'
-import SignUp from './pages/SignUp.jsx'
-import AddPost from './pages/AddPost.jsx'
-import AllPosts from './pages/AllPosts.jsx'
-import Post from './pages/Post.jsx'
-import Home from './pages/Home.jsx'
+const loadPage = (loadComponent, authentication) => async () => {
+  const Page = (await loadComponent()).default
+  const page = <Page />
+
+  return {
+    element: authentication === undefined
+      ? page
+      : <AuthLayout authentication={authentication}>{page}</AuthLayout>,
+  }
+}
 
 // Hun ithe perform honi saari routing 
 // Routing apa perfrom karvani hun authlayout vich wrap krvake because authlayout neh dasna sanu ki person/user authenticated hai ya nhi 
@@ -27,64 +32,37 @@ const router = createBrowserRouter([
 
       {
         path:'/',
-        element:<Home/>,
+        lazy: loadPage(() => import('./pages/Home.jsx')),
       },
 
     {
       path:'/login',
-      element: (
-        <AuthLayout authentication={false}>  {/* It means that login page upr jaane vaste authentication nhi chaidi  */}
-          <Login/>
-        </AuthLayout>
-      ),
+      lazy: loadPage(() => import('./pages/Login.jsx'), false),
     },
 
     {
       path:'/signup',
-      element: (
-        <AuthLayout authentication={false}>  { /* Signup page vaste authentication jruri nhi hai becuasep pehla banda signup krunga then login krke hi authenticated hounga tah hi ohnu application de andar da show hona system  */}
-          <SignUp/>
-        </AuthLayout>
-      ),
+      lazy: loadPage(() => import('./pages/SignUp.jsx'), false),
     },
 
     {
       path:'/all-posts',
-      element : (
-        <AuthLayout authentication={true}>  {/* Je bande neh saari posts dekhni hai hai tah authenticated jruri hai oh  */}
-          {" "}
-          <AllPosts />
-        </AuthLayout>
-      )
+      lazy: loadPage(() => import('./pages/AllPosts.jsx'), true),
     },
 
     {
       path:'/add-post',
-      element: (
-        <AuthLayout authentication={true}> {/* Je post add karni taah bhi authenticated chaida */}
-          {" "}
-          <AddPost/>
-        </AuthLayout>
-      )
+      lazy: loadPage(() => import('./pages/AddPost.jsx'), true),
     },
 
     {
       path:'/edit-post/:slug',
-      element: (
-        <AuthLayout authentication={true}> {/* je post edit krna chaunda taah bhi complusory hai authentication  */}
-          {" "}
-          <EditPost/>
-        </AuthLayout>
-      )
+      lazy: loadPage(() => import('./pages/EditPost.jsx'), true),
     },
 
     {
       path:'/post/:slug', 
-      element: (
-        <AuthLayout authentication={true}>
-          <Post />
-        </AuthLayout>
-      )
+      lazy: loadPage(() => import('./pages/Post.jsx'), true),
     },
 
     ] ,
@@ -96,7 +74,7 @@ createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>
      
-<RouterProvider router={router} />
+<RouterProvider router={router} fallbackElement={<LoadingAnimation className='p-8 flex-1' />} />
 
     </Provider>
   </StrictMode>,

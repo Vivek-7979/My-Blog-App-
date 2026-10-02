@@ -4,7 +4,10 @@ import {useState} from 'react'
 import { Link , useNavigate } from 'react-router-dom'
 import { login as authLogin } from '../Store/AuthSlice' // We named login method as authlogin in this file and where we write the authlogin it means login . We can also write the authlogin as the Storelogin
 import { useDispatch } from 'react-redux'
-import { Button , Input , Logo, LoadingAnimation } from './Index'
+import Button from './Button'
+import Input from './Input'
+import Logo from './Logo'
+import LoadingAnimation from './LoadingAnimation'
 import authService from '../Appwrite/Auth_service'
 import {useForm} from 'react-hook-form'   // This is mainly what we are using in it for Advanced forms . React-hool-for. -> External reacr library to handle the forms 
 

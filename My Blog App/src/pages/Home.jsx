@@ -48,7 +48,7 @@ function Home() {
 
 if (!authStatus) {
   return (
-    <div className="w-full mb-10 min-h-[calc(100dvh-72px)] flex items-center justify-center px-5 sm:px-8 py-16">
+    <div className="w-full mt-20 mb-10 min-h-[calc(100dvh-72px)] flex items-center justify-center px-5 sm:px-8 py-16">
       <Container>
         <div className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 items-center gap-12 lg:gap-20">
 
@@ -194,12 +194,12 @@ if (!authStatus) {
 }
 
   if (isLoading) {
-    return <LoadingAnimation className='w-full min-h-[calc(100dvh-72px)]' />;
+    return <LoadingAnimation className='w-full mt-20 min-h-[calc(100dvh-72px)]' />;
   }
 
   if (posts.length === 0) {
     return (
-      <div className='w-full py-8 mt-4 text-center'>
+      <div className='w-full mt-20 py-8 text-center'>
         <Container>
           <div className='flex flex-wrap'>
             <div className='p-2 w-full'>
@@ -212,7 +212,7 @@ if (!authStatus) {
   }
 
   return (
-    <div className='w-full py-8'>
+    <div className='w-full mt-20 py-8'>
       <Container>
         <div className='flex flex-wrap'>
           {posts.map((post) => (

@@ -3,8 +3,9 @@ import { useDispatch } from 'react-redux';
 import './App.css';
 import authService from './Appwrite/Auth_service';
 import { login, logout } from './Store/AuthSlice';
-import { Footer, Header } from './Components/Index';
-import { LoadingAnimation } from './Components/Index';
+import Footer from './Components/Footer/Footer';
+import Header from './Components/Header/Header';
+import LoadingAnimation from './Components/LoadingAnimation';
 import { Outlet } from 'react-router-dom';
 
 
@@ -59,7 +60,7 @@ function App() {
       <div className='w-full  min-h-screen flex flex-col'>
         <Header />
 
-        <main>
+        <main className='mb-25 '>
           {isLoading ? <LoadingAnimation className='p-8 flex-1' /> : <Outlet />}
         </main>
 

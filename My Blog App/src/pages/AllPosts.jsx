@@ -45,8 +45,8 @@ function AllPosts() {
 
   return (
 
-        isLoading ? <LoadingAnimation className='w-full min-h-[calc(100dvh-72px)]' /> :
-    <div className='w-full py-8'>
+        isLoading ? <LoadingAnimation className='w-full mt-20 min-h-[calc(100dvh-72px)]' /> :
+    <div className='w-full mt-20 py-8'>
       
    <Container>
     <div className='flex flex-wrap'> 

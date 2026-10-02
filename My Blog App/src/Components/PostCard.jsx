@@ -14,7 +14,7 @@ function PostCard({ $id, slug, title, featuredImage, content }) {
   return (
     
     <Link to={`/post/${postSlug}`}>
-      <div className='w-full bg-gray-100 rounded-xl p-4 h-full '>
+      <div className='w-full  bg-gray-100 rounded-xl p-4 h-full '>
         <div className='w-full justify-center mb-4'>
           {featuredImage && !imageError && imageSrc ? (
             <img
